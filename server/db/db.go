@@ -13,6 +13,7 @@ var dbClient *DB
 
 type DB struct {
 	Conn *mongo.Client
+	Name string
 }
 
 func init() {
@@ -31,7 +32,9 @@ func init() {
 
 	dbClient = &DB{
 		Conn: client,
+		Name: "ecom",
 	}
+
 }
 
 func GetDBClient() *DB {
