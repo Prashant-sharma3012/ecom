@@ -7,24 +7,22 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Prashant-sharma3012/ecom/tree/main/server/domain/entity"
-
-	"github.com/Prashant-sharma3012/ecom/tree/main/server/domain/repository"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var collectionName = "product"
 
-type ProductRepo struct{}
-
-func NewProductRepo() *ProductRepo {
-	return &ProductRepo{}
+type Product struct {
+	ID          string   `json:"id" bson:"id"`
+	Name        string   `json:"name"  bson:"name"`
+	Price       string   `json:"price"  bson:"price"`
+	Description string   `json:"description"  bson:"description"`
+	Rating      int      `json:"rating"  bson:"rating"`
+	Images      []string `json:"images"  bson:"images"`
 }
 
-var _ repository.ProductRepository = &ProductRepo{}
-
-func (pr *ProductRepo) SaveProduct(p *entity.Product) (*entity.Product, error) {
+func (db *DB) createproduct(p Product) (Product, error) {
 
 	collection := dbClient.Conn.Database(dbClient.Name).Collection(collectionName)
 
@@ -33,14 +31,14 @@ func (pr *ProductRepo) SaveProduct(p *entity.Product) (*entity.Product, error) {
 
 	res, err := collection.InsertOne(ctx, p)
 	if err != nil {
-		return &entity.Product{}, err
+		return Product{}, err
 	}
 	p.ID = fmt.Sprintf("%v", res.InsertedID)
 
 	return p, nil
 }
 
-func (pr *ProductRepo) GetAllProduct(skip, limit int64) ([]entity.Product, error) {
+func (db *DB) listProduct(skip, limit int64) ([]Product, error) {
 
 	collection := dbClient.Conn.Database(dbClient.Name).Collection(collectionName)
 
@@ -54,7 +52,7 @@ func (pr *ProductRepo) GetAllProduct(skip, limit int64) ([]entity.Product, error
 		return nil, err
 	}
 
-	var products []entity.Product
+	var products []Product
 
 	for productCur.Next(nil) {
 		elem := &bson.D{}
@@ -65,18 +63,13 @@ func (pr *ProductRepo) GetAllProduct(skip, limit int64) ([]entity.Product, error
 
 		m := elem.Map()
 
-		product := entity.Product{
+		product := Product{
 			ID:          m["id"].(string),
 			Name:        m["name"].(string),
-			Price:       m["price"].(int64),
+			Price:       m["price"].(string),
 			Description: m["description"].(string),
 			Rating:      m["rating"].(int),
 			Images:      m["images"].([]string),
-			Seller:      m["seller"].(string),
-			CreatedBy:   m["createdBy"].(string),
-			UpdatedBy:   m["updatedBy"].(string),
-			UpdatedAt:   m["updatedAt"].(time.Time),
-			CreatedAt:   m["createdAt"].(time.Time),
 		}
 		products = append(products, product)
 	}
@@ -84,24 +77,24 @@ func (pr *ProductRepo) GetAllProduct(skip, limit int64) ([]entity.Product, error
 
 }
 
-func (pr *ProductRepo) GetProduct(productId string) (*entity.Product, error) {
+func (db *DB) productDetailByID(productId string) (Product, error) {
 	collection := dbClient.Conn.Database(dbClient.Name).Collection(collectionName)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	var product entity.Product
+	var product Product
 	filter := bson.M{"id": productId}
 
 	err := collection.FindOne(ctx, filter).Decode(&product)
 	if err != nil {
-		return &entity.Product{}, err
+		return Product{}, err
 	}
 
-	return &product, err
+	return product, err
 }
 
-func (pr *ProductRepo) UpdateProduct(p *entity.Product) ([]byte, error) {
+func UpdateProduct(p Product) ([]byte, error) {
 
 	collection := dbClient.Conn.Database(dbClient.Name).Collection(collectionName)
 
@@ -116,7 +109,7 @@ func (pr *ProductRepo) UpdateProduct(p *entity.Product) ([]byte, error) {
 	return []byte(p.ID + "updated successfully"), nil
 }
 
-func (pr *ProductRepo) DeleteProduct(productId string) ([]byte, error) {
+func DeleteProduct(productId string) ([]byte, error) {
 
 	collection := dbClient.Conn.Database(dbClient.Name).Collection(collectionName)
 

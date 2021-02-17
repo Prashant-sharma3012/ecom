@@ -12,9 +12,8 @@ import (
 var dbClient *DB
 
 type DB struct {
-	Conn    *mongo.Client
-	Name    string
-	Product *ProductRepo
+	Conn *mongo.Client
+	Name string
 }
 
 func init() {
@@ -32,9 +31,8 @@ func init() {
 	}()
 
 	dbClient = &DB{
-		Conn:    client,
-		Name:    "ecom",
-		Product: NewProductRepo(),
+		Conn: client,
+		Name: "ecom",
 	}
 
 }
