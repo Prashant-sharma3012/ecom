@@ -1,14 +1,10 @@
-import styled from 'styled-components'
+import React from "react";
+import styles from "./index.module.css";
 
-const Button = styled.button`
-    background-color: #34c0eb;
-    color: #000;
-    border: none;
-    padding: 4px 8px;
-    border-radius: 2px;
-    &:focus {
-        outline: none;
-    }
-`;
-
-export default Button
+export default function Button(props) {
+  return (
+    <button className={styles.btn} onClick={props.onClick}>
+      {props.children}
+    </button>
+  );
+}

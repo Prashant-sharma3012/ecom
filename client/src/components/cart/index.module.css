@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.icon {
+  height: 24px;
+  width: 24px;
+}
+
+.count {
+  position: relative;
+  background-color: black;
+  border-radius: 100%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  text-align: center;
+  right: 6px;
+  bottom: 6px;
+}

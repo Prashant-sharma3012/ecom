@@ -1,21 +1,18 @@
-import logo from "./logo.svg";
-import "./App.css";
-import Button from "./components/button";
-import Input from "./components/input";
-import Card from "./components/card";
-import Dropdown from "./components/dropdown";
-import AppBar from "./components/appbar";
+import styles from "./App.module.css";
+import Routes from "./routes"
+import AppBar from './components/appbar'
 
 function App() {
+  
   return (
-    <>
-      <AppBar>Yo</AppBar>
-      <Card>
-        <Button>test</Button>
-        <Input />
-        <Dropdown />
-      </Card>
-    </>
+    <div className={styles.main}>
+      <div className={styles.appbar}>
+        <AppBar />
+      </div>
+      <div className={styles.content}>
+        <Routes />
+      </div>
+    </div>
   );
 }
 

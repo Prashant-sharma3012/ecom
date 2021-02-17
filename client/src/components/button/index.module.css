@@ -1,0 +1,13 @@
+.btn {
+  background-color: var(--primary);
+  color: var(--on-primary);
+  padding: 8px;
+  border-radius: 4px;
+  border: none;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+
+.btn:focus{
+  outline: none;
+}

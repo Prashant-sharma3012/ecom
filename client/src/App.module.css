@@ -1,0 +1,14 @@
+.main{
+  display: grid;
+  grid-template-rows: 50px auto;
+  height: 100vh;
+}
+
+.appbar{
+  grid-row: 1/1;
+}
+
+.content{
+  grid-row: 2/2;
+}
+
