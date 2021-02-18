@@ -7,17 +7,17 @@ import (
 )
 
 type Product struct {
-	ID          primitive.ObjectID `json:"id" bson:"_id"`
-	Name        string             `json:"name"  bson:"name"`
-	Price       int64              `json:"price"  bson:"price"`
-	Description string             `json:"description"  bson:"description"`
-	Rating      int32              `json:"rating"  bson:"rating"`
-	Images      []string           `json:"images"  bson:"images"`
-	Seller      string             `json:"seller"  bson:"seller"`
-	CreatedBy   string             `json:"createdBy"  bson:"createdBy"`
-	UpdatedBy   string             `json:"updatedBy"  bson:"updatedBy"`
-	UpdatedAt   time.Time          `json:"updatedAt"  bson:"updatedAt"`
-	CreatedAt   time.Time          `json:"createdAt"  bson:"createdAt"`
+	ID          primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
+	Name        string             `json:"name,omitempty"  bson:"name,omitempty"`
+	Price       int64              `json:"price,omitempty"  bson:"price,omitempty"`
+	Description string             `json:"description,omitempty"  bson:"description,omitempty"`
+	Rating      int32              `json:"rating,omitempty"  bson:"rating,omitempty"`
+	Images      []string           `json:"images,omitempty"  bson:"images,omitempty"`
+	Seller      string             `json:"seller,omitempty"  bson:"seller,omitempty"`
+	CreatedBy   string             `json:"createdBy,omitempty"  bson:"createdBy,omitempty"`
+	UpdatedBy   string             `json:"updatedBy,omitempty"  bson:"updatedBy,omitempty"`
+	UpdatedAt   time.Time          `json:"updatedAt,omitempty"  bson:"updatedAt,omitempty"`
+	CreatedAt   time.Time          `json:"createdAt,omitempty"  bson:"createdAt,omitempty"`
 }
 
 func (p *Product) Validate() map[string]string {

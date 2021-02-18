@@ -15,7 +15,7 @@ type ProductAppInterface interface {
 	SaveProduct(*entity.Product) (*entity.Product, error)
 	GetAllProduct(int64, int64) ([]entity.Product, error)
 	GetProduct(string) (*entity.Product, error)
-	UpdateProduct(*entity.Product) ([]byte, error)
+	UpdateProduct(string, *entity.Product) ([]byte, error)
 	DeleteProduct(string) ([]byte, error)
 }
 
@@ -31,8 +31,8 @@ func (p *ProductApp) GetProduct(ProductId string) (*entity.Product, error) {
 	return p.pr.GetProduct(ProductId)
 }
 
-func (p *ProductApp) UpdateProduct(Product *entity.Product) ([]byte, error) {
-	return p.pr.UpdateProduct(Product)
+func (p *ProductApp) UpdateProduct(ProductId string, Product *entity.Product) ([]byte, error) {
+	return p.pr.UpdateProduct(ProductId, Product)
 }
 
 func (p *ProductApp) DeleteProduct(ProductId string) ([]byte, error) {

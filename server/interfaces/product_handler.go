@@ -23,21 +23,21 @@ func SetupProductRoutes(r *mux.Router, p application.ProductAppInterface) {
 
 	r.HandleFunc("/product/all", productAPIInstance.getProducts).Methods("GET")
 	r.HandleFunc("/product", productAPIInstance.createProduct).Methods("POST")
-	r.HandleFunc("/products/:productId", productAPIInstance.getProductByID).Methods("GET")
-	r.HandleFunc("/products/:productId", productAPIInstance.updateProduct).Methods("PUT")
-	r.HandleFunc("/product/:productId", productAPIInstance.deleteProduct).Methods("DELETE")
+	r.HandleFunc("/products/{productId}", productAPIInstance.getProductByID).Methods("GET")
+	r.HandleFunc("/products/{productId}", productAPIInstance.updateProduct).Methods("PUT")
+	r.HandleFunc("/product/{productId}", productAPIInstance.deleteProduct).Methods("DELETE")
 }
 
 func (p *productAPI) getProducts(w http.ResponseWriter, r *http.Request) {
 	products, err := p.pa.GetAllProduct(0, 10)
 	if err != nil {
-		w.Write([]byte("Error Occured"))
+		w.Write([]byte(err.Error()))
 		return
 	}
 
 	response, err := json.Marshal(products)
 	if err != nil {
-		w.Write([]byte("Error Occured"))
+		w.Write([]byte(err.Error()))
 		return
 	}
 
@@ -76,13 +76,13 @@ func (p *productAPI) getProductByID(w http.ResponseWriter, r *http.Request) {
 
 	product, err := p.pa.GetProduct(productId)
 	if err != nil {
-		w.Write([]byte("Error Occured"))
+		w.Write([]byte(err.Error()))
 		return
 	}
 
 	response, err := json.Marshal(product)
 	if err != nil {
-		w.Write([]byte("Error Occured"))
+		w.Write([]byte(err.Error()))
 		return
 	}
 
@@ -91,19 +91,19 @@ func (p *productAPI) getProductByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *productAPI) updateProduct(w http.ResponseWriter, r *http.Request) {
-	// vars := mux.Vars(r)
-	// productId := vars["productId"]
+	vars := mux.Vars(r)
+	productId := vars["productId"]
 
 	var product *entity.Product
 	err := json.NewDecoder(r.Body).Decode(&product)
 	if err != nil {
-		w.Write([]byte("Error Occured"))
+		w.Write([]byte(err.Error()))
 		return
 	}
 
-	message, err := p.pa.UpdateProduct(product)
+	message, err := p.pa.UpdateProduct(productId, product)
 	if err != nil {
-		w.Write([]byte("Error Occured"))
+		w.Write([]byte(err.Error()))
 		return
 	}
 
@@ -117,7 +117,7 @@ func (p *productAPI) deleteProduct(w http.ResponseWriter, r *http.Request) {
 
 	message, err := p.pa.DeleteProduct(productId)
 	if err != nil {
-		w.Write([]byte("Error Occured"))
+		w.Write([]byte(err.Error()))
 		return
 	}
 

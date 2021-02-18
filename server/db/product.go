@@ -79,10 +79,14 @@ func (pr *ProductRepo) GetProduct(productId string) (*entity.Product, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	fmt.Println(productId)
+
 	objectId, _ := primitive.ObjectIDFromHex(productId)
 
+	fmt.Println(objectId)
+
 	var product entity.Product
-	filter := bson.M{"id": objectId}
+	filter := bson.M{"_id": objectId}
 
 	err := collection.FindOne(ctx, filter).Decode(&product)
 	if err != nil {
@@ -92,19 +96,20 @@ func (pr *ProductRepo) GetProduct(productId string) (*entity.Product, error) {
 	return &product, err
 }
 
-func (pr *ProductRepo) UpdateProduct(p *entity.Product) ([]byte, error) {
+func (pr *ProductRepo) UpdateProduct(productId string, p *entity.Product) ([]byte, error) {
 
 	collection := DBClient.Conn.Collection(collectionName)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	_, err := collection.UpdateOne(ctx, bson.D{{"id", p.ID}}, bson.D{{"$set", p}})
+	objectId, _ := primitive.ObjectIDFromHex(productId)
+	_, err := collection.UpdateOne(ctx, bson.D{{"_id", objectId}}, bson.D{{"$set", p}})
 
 	if err != nil {
 		return nil, err
 	}
-	return []byte(p.ID.Hex() + "updated successfully"), nil
+	return []byte(productId + " updated successfully"), nil
 }
 
 func (pr *ProductRepo) DeleteProduct(productId string) ([]byte, error) {
@@ -114,7 +119,9 @@ func (pr *ProductRepo) DeleteProduct(productId string) ([]byte, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	res, err := collection.DeleteOne(ctx, bson.D{{"id", productId}})
+	objectId, _ := primitive.ObjectIDFromHex(productId)
+
+	res, err := collection.DeleteOne(ctx, bson.D{{"_id", objectId}})
 	if err != nil {
 		return nil, err
 	}

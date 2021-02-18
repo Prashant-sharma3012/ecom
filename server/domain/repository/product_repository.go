@@ -6,6 +6,6 @@ type ProductRepository interface {
 	SaveProduct(*entity.Product) (*entity.Product, error)
 	GetProduct(string) (*entity.Product, error)
 	GetAllProduct(int64, int64) ([]entity.Product, error)
-	UpdateProduct(*entity.Product) ([]byte, error)
+	UpdateProduct(string, *entity.Product) ([]byte, error)
 	DeleteProduct(string) ([]byte, error)
 }
