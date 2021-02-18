@@ -7,7 +7,7 @@ type Product struct {
 	Name        string    `json:"name"  bson:"name"`
 	Price       int64     `json:"price"  bson:"price"`
 	Description string    `json:"description"  bson:"description"`
-	Rating      int       `json:"rating"  bson:"rating"`
+	Rating      int32     `json:"rating"  bson:"rating"`
 	Images      []string  `json:"images"  bson:"images"`
 	Seller      string    `json:"seller"  bson:"seller"`
 	CreatedBy   string    `json:"createdBy"  bson:"createdBy"`

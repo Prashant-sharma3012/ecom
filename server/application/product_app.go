@@ -9,7 +9,7 @@ type ProductApp struct {
 	pr repository.ProductRepository
 }
 
-var _ ProductAppInterface = &ProductApp{}
+// var _ ProductAppInterface = &ProductApp{}
 
 type ProductAppInterface interface {
 	SaveProduct(*entity.Product) (*entity.Product, error)

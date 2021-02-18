@@ -9,7 +9,6 @@ import (
 
 	"github.com/Prashant-sharma3012/ecom/tree/main/server/domain/entity"
 
-	"github.com/Prashant-sharma3012/ecom/tree/main/server/domain/repository"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -22,7 +21,8 @@ func NewProductRepo() *ProductRepo {
 	return &ProductRepo{}
 }
 
-var _ repository.ProductRepository = &ProductRepo{}
+// why should i do this!!!!
+// var _ repository.ProductRepository = &ProductRepo{}
 
 func (pr *ProductRepo) SaveProduct(p *entity.Product) (*entity.Product, error) {
 
@@ -70,7 +70,7 @@ func (pr *ProductRepo) GetAllProduct(skip, limit int64) ([]entity.Product, error
 			Name:        m["name"].(string),
 			Price:       m["price"].(int64),
 			Description: m["description"].(string),
-			Rating:      m["rating"].(int),
+			Rating:      m["rating"].(int32),
 			Images:      m["images"].([]string),
 			Seller:      m["seller"].(string),
 			CreatedBy:   m["createdBy"].(string),

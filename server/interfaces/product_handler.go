@@ -49,20 +49,20 @@ func (p *productAPI) createProduct(w http.ResponseWriter, r *http.Request) {
 	var product *entity.Product
 	err := json.NewDecoder(r.Body).Decode(&product)
 	if err != nil {
-		w.Write([]byte("Error Occured"))
+		w.Write([]byte(err.Error()))
 		return
 	}
 
 	savedProduct, err := p.pa.SaveProduct(product)
 	if err != nil {
 		fmt.Println(err)
-		w.Write([]byte("Error Occured"))
+		w.Write([]byte(err.Error()))
 		return
 	}
 
 	response, err := json.Marshal(savedProduct)
 	if err != nil {
-		w.Write([]byte("Error Occured"))
+		w.Write([]byte(err.Error()))
 		return
 	}
 
