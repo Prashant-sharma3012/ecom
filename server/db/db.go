@@ -12,7 +12,7 @@ import (
 var dbClient *DB
 
 type DB struct {
-	Conn    *mongo.Client
+	Conn    *mongo.Database
 	Name    string
 	Product *ProductRepo
 }
@@ -32,7 +32,7 @@ func init() {
 	}()
 
 	dbClient = &DB{
-		Conn:    client,
+		Conn:    client.Database("ecom"),
 		Name:    "ecom",
 		Product: NewProductRepo(),
 	}

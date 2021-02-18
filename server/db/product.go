@@ -26,7 +26,7 @@ var _ repository.ProductRepository = &ProductRepo{}
 
 func (pr *ProductRepo) SaveProduct(p *entity.Product) (*entity.Product, error) {
 
-	collection := dbClient.Conn.Database(dbClient.Name).Collection(collectionName)
+	collection := dbClient.Conn.Collection(collectionName)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -42,7 +42,7 @@ func (pr *ProductRepo) SaveProduct(p *entity.Product) (*entity.Product, error) {
 
 func (pr *ProductRepo) GetAllProduct(skip, limit int64) ([]entity.Product, error) {
 
-	collection := dbClient.Conn.Database(dbClient.Name).Collection(collectionName)
+	collection := dbClient.Conn.Collection(collectionName)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -85,7 +85,7 @@ func (pr *ProductRepo) GetAllProduct(skip, limit int64) ([]entity.Product, error
 }
 
 func (pr *ProductRepo) GetProduct(productId string) (*entity.Product, error) {
-	collection := dbClient.Conn.Database(dbClient.Name).Collection(collectionName)
+	collection := dbClient.Conn.Collection(collectionName)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -103,7 +103,7 @@ func (pr *ProductRepo) GetProduct(productId string) (*entity.Product, error) {
 
 func (pr *ProductRepo) UpdateProduct(p *entity.Product) ([]byte, error) {
 
-	collection := dbClient.Conn.Database(dbClient.Name).Collection(collectionName)
+	collection := dbClient.Conn.Collection(collectionName)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -118,7 +118,7 @@ func (pr *ProductRepo) UpdateProduct(p *entity.Product) ([]byte, error) {
 
 func (pr *ProductRepo) DeleteProduct(productId string) ([]byte, error) {
 
-	collection := dbClient.Conn.Database(dbClient.Name).Collection(collectionName)
+	collection := dbClient.Conn.Collection(collectionName)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
