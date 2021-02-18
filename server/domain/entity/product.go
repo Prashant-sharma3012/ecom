@@ -1,19 +1,23 @@
 package entity
 
-import "time"
+import (
+	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 type Product struct {
-	ID          string    `json:"id" bson:"id"`
-	Name        string    `json:"name"  bson:"name"`
-	Price       int64     `json:"price"  bson:"price"`
-	Description string    `json:"description"  bson:"description"`
-	Rating      int32     `json:"rating"  bson:"rating"`
-	Images      []string  `json:"images"  bson:"images"`
-	Seller      string    `json:"seller"  bson:"seller"`
-	CreatedBy   string    `json:"createdBy"  bson:"createdBy"`
-	UpdatedBy   string    `json:"updatedBy"  bson:"updatedBy"`
-	UpdatedAt   time.Time `json:"updatedAt"  bson:"updatedAt"`
-	CreatedAt   time.Time `json:"createdAt"  bson:"createdAt"`
+	ID          primitive.ObjectID `json:"id" bson:"_id"`
+	Name        string             `json:"name"  bson:"name"`
+	Price       int64              `json:"price"  bson:"price"`
+	Description string             `json:"description"  bson:"description"`
+	Rating      int32              `json:"rating"  bson:"rating"`
+	Images      []string           `json:"images"  bson:"images"`
+	Seller      string             `json:"seller"  bson:"seller"`
+	CreatedBy   string             `json:"createdBy"  bson:"createdBy"`
+	UpdatedBy   string             `json:"updatedBy"  bson:"updatedBy"`
+	UpdatedAt   time.Time          `json:"updatedAt"  bson:"updatedAt"`
+	CreatedAt   time.Time          `json:"createdAt"  bson:"createdAt"`
 }
 
 func (p *Product) Validate() map[string]string {

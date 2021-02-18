@@ -10,6 +10,7 @@ import (
 	"github.com/Prashant-sharma3012/ecom/tree/main/server/domain/entity"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -31,11 +32,12 @@ func (pr *ProductRepo) SaveProduct(p *entity.Product) (*entity.Product, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	res, err := collection.InsertOne(ctx, p)
+	p.ID = primitive.NewObjectID()
+
+	_, err := collection.InsertOne(ctx, p)
 	if err != nil {
 		return &entity.Product{}, err
 	}
-	p.ID = fmt.Sprintf("%v", res.InsertedID)
 
 	return p, nil
 }
@@ -54,34 +56,21 @@ func (pr *ProductRepo) GetAllProduct(skip, limit int64) ([]entity.Product, error
 		return nil, err
 	}
 
+	var result []bson.M
 	var products []entity.Product
 
-	for productCur.Next(ctx) {
-		elem := &bson.D{}
-		err := productCur.Decode(elem)
-		if err != nil {
-			log.Fatal("Decode error ", err)
-		}
+	if err = productCur.All(ctx, &result); err != nil {
+		log.Fatal(err)
+	}
 
-		m := elem.Map()
-
-		product := entity.Product{
-			ID:          m["id"].(string),
-			Name:        m["name"].(string),
-			Price:       m["price"].(int64),
-			Description: m["description"].(string),
-			Rating:      m["rating"].(int32),
-			Images:      m["images"].([]string),
-			Seller:      m["seller"].(string),
-			CreatedBy:   m["createdBy"].(string),
-			UpdatedBy:   m["updatedBy"].(string),
-			UpdatedAt:   m["updatedAt"].(time.Time),
-			CreatedAt:   m["createdAt"].(time.Time),
-		}
+	for _, value := range result {
+		var product entity.Product
+		bsonBytes, _ := bson.Marshal(value)
+		bson.Unmarshal(bsonBytes, &product)
 		products = append(products, product)
 	}
-	return products, nil
 
+	return products, nil
 }
 
 func (pr *ProductRepo) GetProduct(productId string) (*entity.Product, error) {
@@ -90,8 +79,10 @@ func (pr *ProductRepo) GetProduct(productId string) (*entity.Product, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	objectId, _ := primitive.ObjectIDFromHex(productId)
+
 	var product entity.Product
-	filter := bson.M{"id": productId}
+	filter := bson.M{"id": objectId}
 
 	err := collection.FindOne(ctx, filter).Decode(&product)
 	if err != nil {
@@ -113,7 +104,7 @@ func (pr *ProductRepo) UpdateProduct(p *entity.Product) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	return []byte(p.ID + "updated successfully"), nil
+	return []byte(p.ID.Hex() + "updated successfully"), nil
 }
 
 func (pr *ProductRepo) DeleteProduct(productId string) ([]byte, error) {
