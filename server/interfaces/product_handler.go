@@ -3,7 +3,6 @@ package interfaces
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/Prashant-sharma3012/ecom/tree/main/server/application"
@@ -30,23 +29,18 @@ func SetupProductRoutes(r *mux.Router, p application.ProductAppInterface) {
 }
 
 func (p *productAPI) getProducts(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("getting Products")
 	products, err := p.pa.GetAllProduct(0, 10)
 	if err != nil {
 		w.Write([]byte("Error Occured"))
 		return
 	}
 
-	log.Println("completed")
-
-	log.Println("creating response")
 	response, err := json.Marshal(products)
 	if err != nil {
 		w.Write([]byte("Error Occured"))
 		return
 	}
 
-	log.Println("sending")
 	w.WriteHeader(http.StatusOK)
 	w.Write(response)
 }

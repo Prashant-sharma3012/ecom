@@ -9,7 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var dbClient *DB
+var DBClient *DB
 
 type DB struct {
 	Conn    *mongo.Database
@@ -26,13 +26,7 @@ func init() {
 		log.Fatal("DB connection failed")
 	}
 
-	defer func() {
-		if err = client.Disconnect(ctx); err != nil {
-			panic(err)
-		}
-	}()
-
-	dbClient = &DB{
+	DBClient = &DB{
 		Conn:    client.Database("ecom"),
 		Name:    "ecom",
 		Product: NewProductRepo(),
@@ -41,5 +35,5 @@ func init() {
 }
 
 func GetDBClient() *DB {
-	return dbClient
+	return DBClient
 }
