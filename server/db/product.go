@@ -44,7 +44,7 @@ func (pr *ProductRepo) GetAllProduct(skip, limit int64) ([]entity.Product, error
 
 	collection := dbClient.Conn.Collection(collectionName)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	productCur, err := collection.Find(ctx, bson.M{}, options.Find().SetSkip(skip).SetLimit(limit))
@@ -56,7 +56,7 @@ func (pr *ProductRepo) GetAllProduct(skip, limit int64) ([]entity.Product, error
 
 	var products []entity.Product
 
-	for productCur.Next(nil) {
+	for productCur.Next(ctx) {
 		elem := &bson.D{}
 		err := productCur.Decode(elem)
 		if err != nil {
